@@ -1,0 +1,70 @@
+# Reading data
+n = int(input())
+a = [list(map(int, input().split())) for i in range(n)]
+
+# Array of point coordinates
+e = [int] * 0
+
+# Amount of points
+o = 0
+
+# Point selection cycle
+while not (not a):
+    # Calculating the end of the last line segment
+    max = 0
+    for i in range(len(a)):
+        if a[i][1] > max:
+            max = a[i][1]
+    
+    # Array showing the number of line segments at one point
+    b = 0 * [int]
+    
+    # An array that stores numbers from 1 to max
+    c = 0 * [int]
+    
+    # Helper variable
+    s = 0
+    
+    # Filling arrays b and c
+    for i in range(max):
+        for j in range(len(a)):
+            if a[j][0] <= i <= a[j][1]:
+                s += 1
+        b.append(s)
+        c.append(i)
+        s = 0
+    
+    # Bubble sort array b
+    swapped = True
+    while swapped:
+        swapped = False
+        for i in range(len(b) - 1):
+            if b[i] > b[i + 1]:
+                b[i], b[i + 1] = b[i + 1], b[i]
+                
+                # The elements of the array b and c are "concatenated", so the array c is sorted too
+                c[i], c[i + 1] = c[i + 1], c[i]
+                swapped = True
+                
+    # Helper variable     
+    u = 0
+    
+    # Deletes the segments overlaid by the last point in the sorted array c
+    for j in range(n):
+        if not a:
+            break
+        if u >= len(a):
+            u = 0
+        if a[u][0] <= c[-1] <= a[u][1]:
+            del a[u]
+        else:
+            u += 1
+    
+    # Add to point counters
+    o += 1
+    e.append(c[-1])
+
+# Point output
+print(o)
+e.sort()
+print(*e)
